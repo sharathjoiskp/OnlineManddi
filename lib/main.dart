@@ -34,16 +34,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return BlocProvider(
       create: (context) => ApiCubit(),
-      child: 
-      
-      
-      
-      
-      
-      GetMaterialApp(
+      child: GetMaterialApp(
           title: 'Hasi Adike',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
