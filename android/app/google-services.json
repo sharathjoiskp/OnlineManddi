@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "665421569414",
+    "project_id": "hasiadike",
+    "storage_bucket": "hasiadike.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665421569414:android:869bd64fa6d41239a4a007",
+        "android_client_info": {
+          "package_name": "com.example.hasi_adike"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFFB9v6_ztKxRwqUJmocEfKPhlInp0cEk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

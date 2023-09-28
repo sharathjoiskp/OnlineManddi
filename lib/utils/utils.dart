@@ -1,0 +1,1 @@
+enum PostSortType { byNumberOfAcres, byPostedDate }
