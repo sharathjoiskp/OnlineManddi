@@ -37,7 +37,13 @@ class MyApp extends StatelessWidget {
     
     return BlocProvider(
       create: (context) => ApiCubit(),
-      child: GetMaterialApp(
+      child: 
+      
+      
+      
+      
+      
+      GetMaterialApp(
           title: 'Hasi Adike',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
