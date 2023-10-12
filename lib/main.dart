@@ -2,14 +2,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:hasi_adike/pages/posts/landing_post_page.dart';
 import 'package:hasi_adike/theme/color_schemes.g.dart';
 import 'package:hasi_adike/cubit/api_cubit.dart';
 import 'package:hasi_adike/cubit/sort_filter_cubit.dart';
 import 'package:hasi_adike/pages/posts/information_collection_page.dart';
 import 'package:hasi_adike/firebase_options.dart';
 import 'package:hasi_adike/pages/authPage/main_login_page.dart';
-import 'package:hasi_adike/pages/posts/post_list_page.dart';
 import 'package:hasi_adike/theme/text_theme.dart';
+import 'package:hasi_adike/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -20,7 +21,7 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   String accType = prefs.getString('accType') ?? '';
-
+  uid = prefs.getString('uid') ?? '';
   runApp(MyApp(
     isLoggedIn: isLoggedIn,
     accType: accType,
@@ -60,8 +61,8 @@ class MyApp extends StatelessWidget {
                       selectedSellType: 'Cheni')
                   : BlocProvider(
                       create: (context) => SortFilterCubit(),
-                      child: PostListPage(
-                        accType: accType,
+                      child: LandingPostsPage(
+                        tabIndex: 0,
                       ),
                     )
               : MainLoginPage()),

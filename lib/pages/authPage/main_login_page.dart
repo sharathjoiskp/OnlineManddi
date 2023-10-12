@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hasi_adike/cubit/api_cubit.dart';
 import 'package:hasi_adike/cubit/sort_filter_cubit.dart';
+import 'package:hasi_adike/pages/authPage/functions.dart';
 import 'package:hasi_adike/pages/posts/information_collection_page.dart';
-import 'package:hasi_adike/pages/posts/post_list_page.dart';
+import 'package:hasi_adike/pages/posts/landing_post_page.dart';
+import 'package:hasi_adike/pages/posts/all_post_page.dart';
 import 'package:hasi_adike/widgets/widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MainLoginPage extends StatelessWidget {
   @override
@@ -32,7 +33,7 @@ class MainLoginPage extends StatelessWidget {
                   context, state.error, Theme.of(context).colorScheme.error);
             } else if (state is CommonSucees) {
               if (state.message == 'ourWorker') {
-                saveUserData("ourWorker", true);
+                saveUserData("ourWorker", true, uid: '123');
                 showCustomSnackBar(context, "Login Sucessfull",
                     Theme.of(context).colorScheme.primary);
                 Get.offAll(
@@ -50,16 +51,19 @@ class MainLoginPage extends StatelessWidget {
                       selectedSellType: 'Cheni'),
                 );
               } else if (state.message == 'vendor') {
-                saveUserData("vendor", true);
                 showCustomSnackBar(context, "Login Sucessfull",
                     Theme.of(context).colorScheme.primary);
                 Get.offAll(
                   BlocProvider(
-                    create: (context) => SortFilterCubit(),
-                    child: const PostListPage(
-                      accType: "vendor",
-                    ),
-                  ),
+                      create: (context) => SortFilterCubit(),
+                      child: LandingPostsPage(
+                        tabIndex: 0,
+                      )
+
+                      // const PostListPage(
+                      //   accType: "vendor",
+                      // ),
+                      ),
                 );
               }
             }
@@ -233,10 +237,4 @@ class MainLoginPage extends StatelessWidget {
       },
     );
   }
-}
-
-Future<void> saveUserData(String accType, bool isLoggedIn) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('accType', accType);
-  await prefs.setBool('isLoggedIn', isLoggedIn);
 }

@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hasi_adike/cubit/api_cubit.dart';
 import 'package:hasi_adike/cubit/sort_filter_cubit.dart';
+import 'package:hasi_adike/pages/authPage/functions.dart';
 import 'package:hasi_adike/pages/posts/functions.dart';
 import 'package:hasi_adike/pages/authPage/main_login_page.dart';
 import 'package:hasi_adike/pages/posts/models/model.dart';
-import 'package:hasi_adike/pages/posts/post_list_page.dart';
+import 'package:hasi_adike/pages/posts/all_post_page.dart';
 import 'package:hasi_adike/widgets/widget.dart';
 
 class InformationCollectionPage extends StatefulWidget {
@@ -36,7 +37,8 @@ class InformationCollectionPage extends StatefulWidget {
       required this.accType});
 
   @override
-  State<InformationCollectionPage> createState() => _InformationCollectionPageState();
+  State<InformationCollectionPage> createState() =>
+      _InformationCollectionPageState();
 }
 
 class _InformationCollectionPageState extends State<InformationCollectionPage> {
@@ -96,7 +98,7 @@ class _InformationCollectionPageState extends State<InformationCollectionPage> {
                           child: const Text('No')),
                       OutlinedButton(
                           onPressed: () async {
-                            await saveUserData("", false);
+                            await saveUserData("", false, uid: '');
                             Get.offAll(MainLoginPage());
                           },
                           child: const Text('yes'))
@@ -352,7 +354,7 @@ class _InformationCollectionPageState extends State<InformationCollectionPage> {
                                 ElevatedButton(
                                   onPressed: () async {
                                     if (_formKey.currentState!.validate()) {
-                                      PostDeatils postDetails = PostDeatils(
+                                      PostDetailsModel postDetails = PostDetailsModel(
                                         name: nameController.text,
                                         sonOf: sonOfController.text,
                                         phoneNumber: phoneNumberController.text,
@@ -420,7 +422,7 @@ class _InformationCollectionPageState extends State<InformationCollectionPage> {
                                   onPressed: () {
                                     Get.to(BlocProvider(
                                       create: (context) => SortFilterCubit(),
-                                      child: PostListPage(
+                                      child: AllPostPage(
                                         accType: widget.accType,
                                       ),
                                     ));
@@ -433,7 +435,7 @@ class _InformationCollectionPageState extends State<InformationCollectionPage> {
                               child: ElevatedButton(
                                   onPressed: () async {
                                     if (_formKey.currentState!.validate()) {
-                                      PostDeatils postDetails = PostDeatils(
+                                      PostDetailsModel postDetails = PostDetailsModel(
                                         name: nameController.text,
                                         sonOf: sonOfController.text,
                                         phoneNumber: phoneNumberController.text,
@@ -481,7 +483,7 @@ class _InformationCollectionPageState extends State<InformationCollectionPage> {
                                       await postCubit.updatePost(postDetails);
                                       Get.to(BlocProvider(
                                         create: (context) => SortFilterCubit(),
-                                        child: PostListPage(
+                                        child: AllPostPage(
                                           accType: widget.accType,
                                         ),
                                       ));

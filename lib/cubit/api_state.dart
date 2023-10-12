@@ -7,7 +7,7 @@ class PostInitial extends ApiState {}
 class PostLoading extends ApiState {}
 
 class PostLoaded extends ApiState {
-  List<PostDeatils> postList;
+  List<PostDetailsModel> postList;
 
   PostLoaded(this.postList);
 }

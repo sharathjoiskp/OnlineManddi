@@ -1,18 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hasi_adike/pages/authPage/functions.dart';
 import 'package:hasi_adike/pages/posts/models/model.dart';
 import 'package:hasi_adike/utils/utils.dart';
 part 'api_state.dart';
 
+String hasiAdike = BackEndConfig().hasiAdike;
+String ourWorkerPin = BackEndConfig().ourWorkerPin;
+String vendorAccounts = BackEndConfig().vendorAccounts;
+String vendorRequest = BackEndConfig().vendorRequest;
+
 class ApiCubit extends Cubit<ApiState> {
   ApiCubit() : super(PostInitial());
 
-  Future<void> createPost(PostDeatils data) async {
+  Future<void> createPost(PostDetailsModel data) async {
     emit(PostLoading());
 
     try {
       await FirebaseFirestore.instance
-          .collection('hasiAdike')
+          .collection(hasiAdike)
           .doc(data.phoneNumber)
           .set(data.toMap());
 
@@ -22,10 +28,31 @@ class ApiCubit extends Cubit<ApiState> {
     }
   }
 
-  Future<void> updatePost(PostDeatils updatedData) async {
+  Future<void> movePost(
+      {required String postId,
+      required String userId,
+      required int moveTo}) async {
+    emit(PostLoading());
     try {
       await FirebaseFirestore.instance
-          .collection('hasiAdike')
+          .collection(hasiAdike)
+          .doc(postId)
+          .collection('userActions')
+          .doc(userId)
+          .set({
+        'uid': userId,
+        'category': moveTo,
+      });
+      emit(CommonSucees(moveTo.toString()));
+    } catch (e) {
+      emit(PostError('Error: ${e.toString()}'));
+    }
+  }
+
+  Future<void> updatePost(PostDetailsModel updatedData) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(hasiAdike)
           .doc(updatedData.phoneNumber)
           .update(updatedData.toMap());
 
@@ -36,29 +63,49 @@ class ApiCubit extends Cubit<ApiState> {
   }
 
   Future<void> fetchPost() async {
+    print('fun calling');
     emit(PostLoading());
-    List<PostDeatils> listPostInstance = [];
+
+    List<PostDetailsModel> listPostInstances = [];
+    final db = FirebaseFirestore.instance.collection(hasiAdike);
+
     try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance.collection('hasiAdike').get();
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await db.get();
+      for (var docSnapshot in querySnapshot.docs) {
+        var postInstance = PostDetailsModel.fromMap(docSnapshot.data());
+        var userAction = <UserActionModel>[];
 
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document
-          in querySnapshot.docs) {
-        Map<String, dynamic> data = document.data();
+        QuerySnapshot<Map<String, dynamic>> subCollectionSnapshot =
+            await db.doc(docSnapshot.id).collection('userActions').get();
 
-        if (data.containsKey('isActive') && data['isActive'] == true) {
-          PostDeatils postDetails = PostDeatils.fromMap(data);
-          listPostInstance.add(postDetails);
+        for (var docSubSnap in subCollectionSnapshot.docs) {
+          var userData = docSubSnap.data();
+          userAction.add(UserActionModel.fromMap(userData));
+
+          // print('');
+          // if (userData['uid'] == 'uid559' && userData['category'] == 1) {
+          //   print(userData);
+
+          //   // break;
+          // }
         }
+
+        postInstance.userActions = userAction;
+        listPostInstances.add(postInstance);
+      }
+      for (var element in listPostInstances) {
+        print('post list ');
+        print(element.id);
+        print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
       }
 
-      emit(PostLoaded(listPostInstance));
+      emit(PostLoaded(listPostInstances));
     } catch (e) {
-      emit(PostError('Error: ${e.toString()}'));
+      emit(PostError('Error: $e'));
     }
   }
 
-  sortPosts(List<PostDeatils> posts, PostSortType sortType) {
+  sortPosts(List<PostDetailsModel> posts, PostSortType sortType) {
     final sortOrder = [
       "below 1",
       "1",
@@ -85,10 +132,9 @@ class ApiCubit extends Cubit<ApiState> {
     emit(PostLoaded(posts));
   }
 
-  filterPosts(List<PostDeatils> posts, filterType) {
+  filterPosts(List<PostDetailsModel> posts, filterType) {
     emit(PostLoading());
-    List<PostDeatils> filteredPosts = [];
-    print(filterType);
+    List<PostDetailsModel> filteredPosts = [];
     switch (filterType) {
       case "below 1 Acre":
         filteredPosts
@@ -148,7 +194,7 @@ class ApiCubit extends Cubit<ApiState> {
 
     try {
       var docSnapshot = await FirebaseFirestore.instance
-          .collection('ourWorkerPin')
+          .collection(ourWorkerPin)
           .doc('loginPin')
           .get();
       if (docSnapshot.exists && docSnapshot.data()?['pin'] == enteredPIN) {
@@ -169,15 +215,18 @@ class ApiCubit extends Cubit<ApiState> {
     } else {
       try {
         var docSnapshot = await FirebaseFirestore.instance
-            .collection('vendorAccounts')
+            .collection(vendorAccounts)
             .doc(phoneNumber)
             .get();
         if (docSnapshot.exists &&
             docSnapshot.data()?['phoneNumber'] == int.parse(phoneNumber)) {
+          saveUserData("vendor", true, uid: docSnapshot.data()?['uid']);
+          uid = docSnapshot.data()?['uid'];
+
           emit(CommonSucees('vendor'));
         } else {
           await FirebaseFirestore.instance
-              .collection('vendorRequest')
+              .collection(vendorRequest)
               .doc(phoneNumber)
               .set({
             "phoneNumber": int.parse(phoneNumber),
