@@ -2,27 +2,46 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hasi_adike/pages/posts/models/model.dart';
 import 'package:hasi_adike/utils/utils.dart';
+
+import '../pages/posts/functions.dart';
 part 'api_state.dart';
 
 class ApiCubit extends Cubit<ApiState> {
   ApiCubit() : super(PostInitial());
 
-  Future<void> createPost(PostDeatils data) async {
+  Future<void> createPost(
+      PostDeatils data, String msg, bool whatsappNumberPresent) async {
     emit(PostLoading());
 
     try {
-      await FirebaseFirestore.instance
+      var existingDocument = await FirebaseFirestore.instance
           .collection('hasiAdike')
           .doc(data.phoneNumber)
-          .set(data.toMap());
+          .get();
 
-      emit(PostAdded('Your Details Posted'));
+      if (existingDocument.exists) {
+        emit(PostError('Document with this phone number already exists.'));
+      } else {
+        await FirebaseFirestore.instance
+            .collection('hasiAdike')
+            .doc(data.phoneNumber)
+            .set(data.toMap());
+
+        emit(PostAdded('Your Details Posted'));
+        if (whatsappNumberPresent) {
+          if (state is PostAdded) {
+            sendWhatsAppMessage(int.parse(data.whatsappNumber), msg);
+          }
+        }
+      }
     } catch (e) {
       emit(PostError('Error: ${e.toString()}'));
     }
   }
 
-  Future<void> updatePost(PostDeatils updatedData) async {
+  Future<void> updatePost(
+    PostDeatils updatedData,
+  ) async {
     try {
       await FirebaseFirestore.instance
           .collection('hasiAdike')
