@@ -36,7 +36,8 @@ class InformationCollectionPage extends StatefulWidget {
       required this.accType});
 
   @override
-  State<InformationCollectionPage> createState() => _InformationCollectionPageState();
+  State<InformationCollectionPage> createState() =>
+      _InformationCollectionPageState();
 }
 
 class _InformationCollectionPageState extends State<InformationCollectionPage> {
@@ -372,19 +373,9 @@ class _InformationCollectionPageState extends State<InformationCollectionPage> {
 
                                       String phoneNumber =
                                           whatsappNumberController.text.trim();
-                                      String message = "🌾 Dear Farmer,\n"
-                                          "Your information has been successfully edited in our app with the following details:\n"
-                                          "Id: P00${phoneNumberController.text.substring(phoneNumberController.text.length - 4)}\n"
-                                          "👤 Name: ${nameController.text}\n"
-                                          "👨‍👦 Father's Name: ${sonOfController.text}\n"
-                                          "📞 Phone Number: ${phoneNumberController.text}\n"
-                                          "💬 WhatsApp Number: ${whatsappNumberController.text}\n"
-                                          "🌱 Number of Acres: ${selectedNoOfAcres.toString()}\n"
-                                          "💰 Sell Type: $selectedSellType\n"
-                                          "🏡 Location: $selectedTaluk $selectedHobali ${villageController.text}\n\n"
-                                          "Please feel free to contact us at your convenience. Thank you! 🌾🚜\n\n"
-                                          "*Message from Online Manddi*\n"
-                                          "----------------------------------------------\n\n"
+                                      String message =
+                                          "🌾ಆತ್ಮೀಯ ರೈತ ಮಿತ್ರರೇ🌾,\n\n"
+                                          "*ನಿಮ್ಮ ಕೃಷಿ ಉತ್ಪನ್ನಗಳನ್ನು ಸುಲಭವಾಗಿ ಮಾರಾಟ ಮಾಡಿ,ಉತ್ತಮ ಬೆಲೆಗಳನ್ನು ಪಡೆಯಿರಿ,ಆನ್‌ಲೈನ್ ಮಂಡಿಯೊಂದಿಗೆ*\n\n"
                                           "ನಿಮ್ಮ ಮಾಹಿತಿಯನ್ನು ಈ ಕೆಳಗಿನ ವಿವರಗಳೊಂದಿಗೆ ನಮ್ಮ ಅಪ್ಲಿಕೇಶನ್‌ನಲ್ಲಿ ಯಶಸ್ವಿಯಾಗಿ ಸಂಪಾದಿಸಲಾಗಿದೆ:\n"
                                           "ಐಡಿ: P00${phoneNumberController.text.substring(phoneNumberController.text.length - 4)}\n"
                                           "👤 ಹೆಸರು: ${nameController.text}\n"
@@ -395,15 +386,26 @@ class _InformationCollectionPageState extends State<InformationCollectionPage> {
                                           "💰 ಮಾರಾಟ ರೀತಿ: $selectedSellType\n"
                                           "🏡 ಸ್ಥಳ: $selectedTaluk $selectedHobali ${villageController.text}\n\n"
                                           "ದಯವಿಟ್ಟು ನಿಮ್ಮ ಅನುಕೂಲಕ್ಕೆ ತಕ್ಕಂತೆ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಲು ಮುಕ್ತವಾಗಿರಿ. ಧನ್ಯವಾದಗಳು! 🌾🚜\n\n"
-                                          "*ಆನ್ಲೈನ್ ಮಂಡಿಯಿಂದ ಸಂದೇಶ*\n";
+                                          "*ಆನ್ಲೈನ್ ಮಂಡಿಯಿಂದ ಸಂದೇಶ*\n"
+                                          "----------------------------------------------\n\n"
+                                          "*Sell your agricultural products easily, get better prices, with Online Mandi*\n\n"
+                                          "Your information has been successfully edited in our app with the following details:\n"
+                                          "Id: P00${phoneNumberController.text.substring(phoneNumberController.text.length - 4)}\n"
+                                          "👤 Name: ${nameController.text}\n"
+                                          "👨‍👦 Father's Name: ${sonOfController.text}\n"
+                                          "📞 Phone Number: ${phoneNumberController.text}\n"
+                                          "💬 WhatsApp Number: ${whatsappNumberController.text}\n"
+                                          "🌱 Number of Acres: ${selectedNoOfAcres.toString()}\n"
+                                          "💰 Sell Type: $selectedSellType\n"
+                                          "🏡 Location: $selectedTaluk $selectedHobali ${villageController.text}\n\n"
+                                          "Please feel free to contact us at your convenience. Thank you! 🌾🚜\n\n"
+                                          "*Message from Online Manddi*\n";
 
-                                      postCubit.createPost(postDetails);
-
-                                      if (whatsappNumberController
-                                          .text.isNotEmpty) {
-                                        sendWhatsAppMessage(
-                                            int.parse(phoneNumber), message);
-                                      }
+                                      postCubit.createPost(
+                                          postDetails,
+                                          message,
+                                          whatsappNumberController
+                                              .text.isNotEmpty);
 
                                       _formKey.currentState!.reset();
                                       nameController.clear();
@@ -454,18 +456,6 @@ class _InformationCollectionPageState extends State<InformationCollectionPage> {
                                       String phoneNumber =
                                           whatsappNumberController.text.trim();
                                       String message = "🌾 Dear Farmer,\n"
-                                          "Your information has been successfully edited in our app with the following details:\n"
-                                          "Id: P00${phoneNumberController.text.substring(phoneNumberController.text.length - 4)}\n"
-                                          "👤 Name: ${nameController.text}\n"
-                                          "👨‍👦 Father's Name: ${sonOfController.text}\n"
-                                          "📞 Phone Number: ${phoneNumberController.text}\n"
-                                          "💬 WhatsApp Number: ${whatsappNumberController.text}\n"
-                                          "🌱 Number of Acres: ${selectedNoOfAcres.toString()}\n"
-                                          "💰 Sell Type: $selectedSellType\n"
-                                          "🏡 Location: $selectedTaluk $selectedHobali ${villageController.text}\n\n"
-                                          "Please feel free to contact us at your convenience. Thank you! 🌾🚜\n\n"
-                                          "*Message from Online Manddi*\n"
-                                          "----------------------------------------------\n\n"
                                           "ನಿಮ್ಮ ಮಾಹಿತಿಯನ್ನು ಈ ಕೆಳಗಿನ ವಿವರಗಳೊಂದಿಗೆ ನಮ್ಮ ಅಪ್ಲಿಕೇಶನ್‌ನಲ್ಲಿ ಯಶಸ್ವಿಯಾಗಿ ಸಂಪಾದಿಸಲಾಗಿದೆ:\n"
                                           "ಐಡಿ: P00${phoneNumberController.text.substring(phoneNumberController.text.length - 4)}\n"
                                           "👤 ಹೆಸರು: ${nameController.text}\n"
@@ -476,7 +466,19 @@ class _InformationCollectionPageState extends State<InformationCollectionPage> {
                                           "💰 ಮಾರಾಟ ರೀತಿ: $selectedSellType\n"
                                           "🏡 ಸ್ಥಳ: $selectedTaluk $selectedHobali ${villageController.text}\n\n"
                                           "ದಯವಿಟ್ಟು ನಿಮ್ಮ ಅನುಕೂಲಕ್ಕೆ ತಕ್ಕಂತೆ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಲು ಮುಕ್ತವಾಗಿರಿ. ಧನ್ಯವಾದಗಳು! 🌾🚜\n\n"
-                                          "*ಆನ್ಲೈನ್ ಮಂಡಿಯಿಂದ ಸಂದೇಶ*\n";
+                                          "*ಆನ್ಲೈನ್ ಮಂಡಿಯಿಂದ ಸಂದೇಶ*\n"
+                                          "----------------------------------------------\n\n"
+                                          "Your information has been successfully edited in our app with the following details:\n"
+                                          "Id: P00${phoneNumberController.text.substring(phoneNumberController.text.length - 4)}\n"
+                                          "👤 Name: ${nameController.text}\n"
+                                          "👨‍👦 Father's Name: ${sonOfController.text}\n"
+                                          "📞 Phone Number: ${phoneNumberController.text}\n"
+                                          "💬 WhatsApp Number: ${whatsappNumberController.text}\n"
+                                          "🌱 Number of Acres: ${selectedNoOfAcres.toString()}\n"
+                                          "💰 Sell Type: $selectedSellType\n"
+                                          "🏡 Location: $selectedTaluk $selectedHobali ${villageController.text}\n\n"
+                                          "Please feel free to contact us at your convenience. Thank you! 🌾🚜\n\n"
+                                          "*Message from Online Manddi*\n";
 
                                       await postCubit.updatePost(postDetails);
                                       Get.to(BlocProvider(
